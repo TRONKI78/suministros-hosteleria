@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2BA8A2">
+<title>Panel Suministros Hostelería</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="estilos.css">
+<style>
+/* Panel de empresa: mismas piezas que la app del cliente, más tiles de cifras, filas editables y acciones de estado */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-md)}
+@media (min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--sh-card);padding:var(--s-md) var(--s-lg);border-left:3px solid var(--primary-light);display:flex;flex-direction:column;gap:2px}
+.kpi span{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--muted)}
+.kpi b{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15}
+.kpi small{font-size:11px;color:var(--muted);font-weight:600}
+.kpi.gold{border-left-color:var(--accent);background:linear-gradient(100deg,rgba(255,228,122,.35),var(--card) 60%);box-shadow:var(--sh-accent)}
+.kpi.coral{border-left-color:var(--coral)}
+.kpi.coral b{color:var(--coral-dark)}
+.kpi.coral.alert{animation:boom 2s infinite}
+.kpi.sky{border-left-color:var(--sky)}
+.kpi.sky b{color:var(--sky)}
+.ocard.new{border-left-color:var(--coral);box-shadow:var(--sh-coral)}
+.cli{font-weight:800;font-size:15px}
+.olines{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.olines li{display:flex;justify-content:space-between;gap:var(--s-sm)}
+.olines li span:last-child{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.onote{font-size:12px;background:var(--cream);border-radius:var(--r-md);padding:6px 10px}
+.oacts{display:flex;gap:var(--s-sm);flex-wrap:wrap}
+.btn-sky{background:var(--sky);color:#fff;box-shadow:var(--sh-sky)}
+.btn-ok{background:var(--success);color:#fff;box-shadow:0 2px 10px rgba(39,174,96,.3)}
+.prod{display:grid;grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"t n n" "t p s";align-items:center;column-gap:var(--s-md);row-gap:6px;background:var(--card);border-radius:var(--r-lg);box-shadow:var(--sh-card);padding:10px var(--s-md);border-left:3px solid var(--primary-light)}
+.prod.off{border-left-color:var(--muted);opacity:.75}
+.prod.chg{border-left-color:var(--accent);box-shadow:var(--sh-accent)}
+.prod .thumb{grid-area:t;align-self:start;width:44px;height:44px;font-size:22px;border-radius:var(--r-md)}
+.prod .nm{grid-area:n;font-weight:700;font-size:13px;line-height:1.25}
+.prod .nm small{display:block;color:var(--muted);font-weight:600;font-size:11px}
+.pin{grid-area:p;display:flex;align-items:center;gap:var(--s-sm)}
+.pin label{display:flex;align-items:center;gap:4px;font-weight:800;color:var(--primary-dark)}
+.pin input{width:88px;height:38px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--cream);padding:0 8px;text-align:right;font-size:16px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;outline:none}
+.pin input:focus{border-color:var(--primary);box-shadow:var(--sh-focus)}
+.pin small{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+.prod .switch{grid-area:s;width:46px;height:28px}
+.prod .switch::after{width:22px;height:22px}
+.prod .switch[aria-checked="true"]::after{left:21px}
+.ritem .nm .pill{margin-left:4px;vertical-align:1px}
+.back{text-decoration:none;color:#fff}
+.hint{display:flex;gap:var(--s-md);align-items:center;background:var(--cream);border:1.5px dashed var(--accent-dark);border-radius:var(--r-lg);padding:var(--s-md) var(--s-lg);font-size:13px}
+.hint .emo{font-size:22px;flex:none}
+.hint a{color:var(--primary-dark);font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <img class="mini" src="logo.png" alt="">
+    <div class="who"><b>PANEL EMPRESA</b><span>Suministros Hostelería</span></div>
+    <a class="iconbtn back" href="index.html" aria-label="Ver la app del cliente" title="Ver la app del cliente">📱</a>
+  </header>
+
+  <main>
+    <!-- HOY -->
+    <section class="view" id="v-hoy">
+      <h1 id="hello">BUENOS DÍAS</h1>
+      <p class="lead" id="today"></p>
+      <div class="kpis">
+        <div class="kpi gold"><span>VENTAS HOY</span><b id="kVentas">0 €</b><small>IVA incluido</small></div>
+        <div class="kpi"><span>PEDIDOS HOY</span><b id="kPedidos">0</b><small id="kTicket">Ticket medio —</small></div>
+        <div class="kpi coral" id="kPrepBox"><span>POR PREPARAR</span><b id="kPrep">0</b><small>Pendientes de salir</small></div>
+        <div class="kpi sky"><span>EN REPARTO</span><b id="kRuta">0</b><small>Camiones en ruta</small></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🔔</span><h2>POR PREPARAR</h2><a href="#pedidos">Ver todos</a></div>
+        <div class="list" id="pendientes"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🏆</span><h2>LO MÁS VENDIDO HOY</h2></div>
+        <div class="rank" id="topHoy"></div>
+      </div>
+      <div class="hint"><span class="emo" aria-hidden="true">💡</span><span>Prueba: haz un pedido desde la <a href="index.html">app del cliente</a> y vuelve aquí. Aparecerá como pedido nuevo.</span></div>
+      <p class="note">Demo con clientes, pedidos y cifras de ejemplo.</p>
+    </section>
+
+    <!-- PEDIDOS -->
+    <section class="view" id="v-pedidos" hidden>
+      <h1>PEDIDOS</h1>
+      <p class="lead">Cambia el estado y el cliente lo ve en su app.</p>
+      <div class="chips" id="fchips"></div>
+      <div class="list" id="olist"></div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section class="view" id="v-productos" hidden>
+      <h1>PRODUCTOS</h1>
+      <p class="lead">Precios con IVA incluido. Los cambios se ven al momento en la app del cliente.</p>
+      <div class="search"><span aria-hidden="true">🔎</span><input id="pq" type="search" placeholder="Buscar producto o referencia…" autocomplete="off" aria-label="Buscar productos"></div>
+      <div class="list" id="plist"></div>
+      <button class="btn btn-ghost btn-block" id="resetCat">↩️ Restaurar precios originales</button>
+    </section>
+
+    <!-- CLIENTES -->
+    <section class="view" id="v-clientes" hidden>
+      <h1>CLIENTES</h1>
+      <p class="lead">Compras de noviembre, IVA incluido.</p>
+      <div class="rank" id="clist"></div>
+    </section>
+  </main>
+</div>
+
+<div class="tabs"><nav aria-label="Secciones">
+  <a href="#hoy" data-v="hoy"><span class="emo" aria-hidden="true">📊</span>Hoy</a>
+  <a href="#pedidos" data-v="pedidos"><span class="emo" aria-hidden="true">🧾</span>Pedidos</a>
+  <a href="#productos" data-v="productos"><span class="emo" aria-hidden="true">📦</span>Productos</a>
+  <a href="#clientes" data-v="clientes"><span class="emo" aria-hidden="true">🏪</span>Clientes</a>
+</nav></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="datos.js"></script>
+<script>
+(function(){
+const IVA=0.21;
+const {CATS,P}=window.SH_DATA;
+const ORIG=Object.fromEntries(P.map(p=>[p.id,p.base]));
+const catBg=Object.fromEntries(CATS.map(c=>[c[0],c[3]]));
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+const $=s=>document.querySelector(s);
+const eur=n=>n.toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(e){return d}};
+const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+
+// Pedidos de hoy de otros clientes (ejemplo)
+const SEED=[
+ {n:'SH-25850',cli:'Restaurante El Pinar',h:'08:42',st:'prep',slot:'Mañana 8–11 h',notes:'Dejar en cocina, entrada por la calle de atrás',items:[[2,6],[8,4],[14,2],[16,1]]},
+ {n:'SH-25849',cli:'Cafetería Mercat',h:'08:15',st:'prep',slot:'Mañana 11–14 h',notes:'',items:[[7,3],[10,2],[17,2]]},
+ {n:'SH-25846',cli:'Hotel Mar Blau',h:'07:58',st:'reparto',slot:'Hoy 8–11 h',notes:'Preguntar por Marta en recepción',items:[[5,6],[13,2],[18,4],[19,2]]},
+ {n:'SH-25844',cli:'Bar Ca la Pepa',h:'07:31',st:'reparto',slot:'Hoy 8–11 h',notes:'',items:[[1,10],[6,2],[15,6]]},
+ {n:'SH-25843',cli:'Pizzería Nápoles',h:'07:05',st:'ok',slot:'Hoy 8–11 h',notes:'',items:[[9,6],[11,2],[12,3]]}
+];
+// Compras del mes antes de hoy (ejemplo)
+const CLIENTES=[
+ ['Hotel Mar Blau','Malvarrosa',1840.50,9],['Restaurante El Pinar','Benimaclet',1265.20,7],['Bar La Lonja','Ciutat Vella',980.30,6],
+ ['Cafetería Mercat','Russafa',742.10,8],['Bar Ca la Pepa','El Cabanyal',611.75,5],['Pizzería Nápoles','Campanar',498.40,4]];
+
+let adminSt=load('sh-admin',{}), filtro='todos', pq='';
+const base=it=>it.reduce((s,[id,n])=>s+(byId[id]?byId[id].p:0)*n,0);
+const total=it=>base(it)*(1+IVA);
+
+// Junta los pedidos de ejemplo con los que ha hecho el cliente de la demo en su app
+function allOrders(){
+  const cli=load('sh-pedidos',null), cliOrders=(cli&&cli.orders)||window.SH_DATA.ORDERS;
+  const mine=cliOrders.filter(o=>o.d==='hoy'||o.st!=='ok').map(o=>({...o,cli:'Bar La Lonja',src:'cli',h:o.h||(o.d==='hoy'?'—':o.d),hoy:o.d==='hoy',slot:o.slot||'Mañana 8–11 h'}));
+  const seed=SEED.map(o=>({...o,st:adminSt[o.n]||o.st,src:'adm',hoy:true}));
+  return [...mine.filter(o=>o.hoy).reverse(),...seed,...mine.filter(o=>!o.hoy)].sort((a,b)=>(b.hoy-a.hoy));
+}
+function setSt(o,st){
+  if(o.src==='cli'){
+    const cli=load('sh-pedidos',null)||{cart:{},ivaIncl:true,points:1840,orders:window.SH_DATA.ORDERS.map(x=>({...x}))};
+    cli.orders=(cli.orders||window.SH_DATA.ORDERS.map(x=>({...x}))); const t=cli.orders.find(x=>x.n===o.n); if(t) t.st=st; store('sh-pedidos',cli);
+  } else {adminSt[o.n]=st;store('sh-admin',adminSt)}
+}
+const ST={prep:['📦 Preparando','gold'],reparto:['🚚 En reparto','sky'],ok:['✔ Entregado','ok']};
+function ocard(o){
+  const [lbl,c]=ST[o.st], isNew=o.src==='cli'&&o.hoy&&o.st==='prep';
+  const act=o.st==='prep'?`<button class="btn btn-sky" data-st="reparto" data-n="${o.n}">🚚 Enviar a reparto</button>`
+    :o.st==='reparto'?`<button class="btn btn-ok" data-st="ok" data-n="${o.n}">✔ Marcar entregado</button>`:'';
+  return `<div class="ocard${isNew?' new':o.st!=='ok'?' live':''}">
+  <div class="ohead"><b>${o.n}</b><span class="pill ${c}">${lbl}</span></div>
+  <div class="ohead"><span class="cli">${esc(o.cli)}${isNew?' <span class="pill coral">NUEVO</span>':''}</span><span class="meta">${esc(o.h)}</span></div>
+  <ul class="olines">${o.items.map(([id,n])=>`<li><span>${n} × ${byId[id].n}</span><span>${(byId[id].p*n*(1+IVA)).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</span></li>`).join('')}</ul>
+  <p>🕗 Entrega: ${esc(o.slot)}</p>${o.notes?`<div class="onote">📝 ${esc(o.notes)}</div>`:''}
+  <div class="ofoot"><span class="price">${eur(total(o.items))}<small>IVA incluido</small></span>${act?`<div class="oacts">${act}</div>`:''}</div></div>`;
+}
+function renderHoy(){
+  const all=allOrders(), hoy=all.filter(o=>o.hoy), v=hoy.reduce((s,o)=>s+total(o.items),0);
+  const prep=all.filter(o=>o.st==='prep'), ruta=all.filter(o=>o.st==='reparto');
+  $('#kVentas').textContent=eur(v); $('#kPedidos').textContent=hoy.length;
+  $('#kTicket').textContent='Ticket medio '+(hoy.length?eur(v/hoy.length):'—');
+  $('#kPrep').textContent=prep.length; $('#kRuta').textContent=ruta.length;
+  $('#kPrepBox').classList.toggle('alert',prep.length>0);
+  const td=$('#today').dataset.date||''; $('#today').textContent=td+(prep.length?` · Tienes ${prep.length} ${prep.length===1?'pedido':'pedidos'} por preparar.`:' · Todo al día.');
+  $('#pendientes').innerHTML=prep.length?prep.map(ocard).join(''):'<div class="empty"><span class="emo">🎉</span>Todo preparado. No hay pedidos pendientes.</div>';
+  const u={}; hoy.forEach(o=>o.items.forEach(([id,n])=>u[id]=(u[id]||0)+n));
+  const top=Object.entries(u).sort((a,b)=>b[1]-a[1]).slice(0,5), medal=['<span class="crown">👑</span>','🥈','🥉'];
+  $('#topHoy').innerHTML=top.map(([id,n],i)=>{const p=byId[id];return `<div class="ritem${i<3?' r'+(i+1):''}"><span class="pos">${i<3?medal[i]:i+1}</span><span class="av">${p.e}</span><span class="nm">${p.n}<small>${p.f}</small></span><span class="sc">${n}</span></div>`}).join('');
+}
+function renderPedidos(){
+  const all=allOrders(), cnt=k=>k==='todos'?all.length:all.filter(o=>o.st===k).length;
+  $('#fchips').innerHTML=[['todos','Todos'],['prep','Preparando'],['reparto','En reparto'],['ok','Entregados']].map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${k===filtro}">${l} · ${cnt(k)}</button>`).join('');
+  const l=all.filter(o=>filtro==='todos'||o.st===filtro);
+  $('#olist').innerHTML=l.length?l.map(ocard).join(''):'<div class="empty"><span class="emo">📭</span>No hay pedidos en este estado.</div>';
+}
+function renderProductos(){
+  const t=pq.trim().toLowerCase(), ov=load('sh-catalogo',{});
+  $('#plist').innerHTML=P.filter(p=>!t||(p.n+' '+p.ref).toLowerCase().includes(t)).map(p=>{const chg=Math.abs(p.p-ORIG[p.id])>.001;
+    return `<div class="prod${p.out?' off':chg?' chg':''}"><span class="thumb" style="background:${catBg[p.cat]}">${p.e}</span>
+    <span class="nm">${p.n}<small>${p.ref} · ${p.f}${chg?` · antes ${eur(ORIG[p.id]*(1+IVA))}`:''}</small></span>
+    <div class="pin"><label><input type="number" inputmode="decimal" step="0.05" min="0" value="${(p.p*(1+IVA)).toFixed(2)}" data-price="${p.id}" id="pr-${p.id}" aria-label="Precio de ${esc(p.n)}">€</label><small>${p.out?'AGOTADO':'DISPONIBLE'}</small></div>
+    <button class="switch" role="switch" aria-checked="${!p.out}" data-av="${p.id}" aria-label="Disponible: ${esc(p.n)}"></button></div>`}).join('')||'<div class="empty"><span class="emo">🤔</span>No hay productos con ese nombre.</div>';
+}
+function saveCat(){const o={};P.forEach(p=>{if(Math.abs(p.p-ORIG[p.id])>.001||p.out)o[p.id]={p:p.p,out:!!p.out}});store('sh-catalogo',o)}
+function renderClientes(){
+  const all=allOrders().filter(o=>o.hoy), add={};
+  all.forEach(o=>add[o.cli]=(add[o.cli]||0)+total(o.items));
+  const l=CLIENTES.map(([n,z,t,k])=>({n,z,t:t+(add[n]||0),k:k+all.filter(o=>o.cli===n).length,hoy:!!add[n]})).sort((a,b)=>b.t-a.t);
+  const medal=['<span class="crown">👑</span>','🥈','🥉'];
+  $('#clist').innerHTML=l.map((c,i)=>`<div class="ritem${i<3?' r'+(i+1):''}"><span class="pos">${i<3?medal[i]:i+1}</span><span class="av">🏪</span>
+   <span class="nm">${c.n}${c.hoy?'<span class="pill teal">Hoy</span>':''}<small>${c.z} · ${c.k} pedidos</small></span><span class="sc">${eur(c.t)}</span></div>`).join('');
+}
+function renderAll(){renderHoy();renderPedidos();renderProductos();renderClientes()}
+
+let tt; function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),2200)}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return; const d=b.dataset;
+  if(d.st){const o=allOrders().find(x=>x.n===d.n); if(o){setSt(o,d.st);renderAll();toast(d.st==='reparto'?`🚚 ${o.n} sale a reparto`:`✔ ${o.n} entregado`)}}
+  else if(d.f){filtro=d.f;renderPedidos()}
+  else if(d.av){const p=byId[d.av];p.out=!p.out;saveCat();renderProductos();toast(p.out?`${p.e} ${p.n}: agotado`:`${p.e} ${p.n}: disponible`)}
+});
+document.addEventListener('change',e=>{
+  const id=e.target.dataset&&e.target.dataset.price; if(!id) return;
+  const v=Math.round(parseFloat(String(e.target.value).replace(',','.'))*100)/100, p=byId[id];
+  if(!(v>0)){e.target.value=(p.p*(1+IVA)).toFixed(2);toast('Escribe un precio mayor que 0');return}
+  p.p=v/(1+IVA);saveCat();renderAll();toast(`💶 ${p.n}: ${eur(v)} IVA incluido`);
+});
+$('#pq').addEventListener('input',e=>{pq=e.target.value;renderProductos()});
+$('#resetCat').onclick=()=>{P.forEach(p=>{p.p=ORIG[p.id];p.out=false});store('sh-catalogo',{});renderAll();toast('↩️ Precios originales restaurados')};
+window.addEventListener('storage',renderAll);
+
+const d=new Date(), h=d.getHours();
+$('#hello').textContent=h<14?'BUENOS DÍAS':h<21?'BUENAS TARDES':'BUENAS NOCHES';
+const td=d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+$('#today').dataset.date=td.charAt(0).toUpperCase()+td.slice(1);
+
+const VIEWS=['hoy','pedidos','productos','clientes'];
+function route(){const v=(location.hash||'#hoy').slice(1), ok=VIEWS.includes(v)?v:'hoy';
+  VIEWS.forEach(k=>$('#v-'+k).hidden=k!==ok);
+  document.querySelectorAll('.tabs a').forEach(a=>a.dataset.v===ok?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+  window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);
+renderAll();route();
+})();
+</script>
+</body>
+</html>

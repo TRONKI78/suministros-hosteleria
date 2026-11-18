@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2BA8A2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Suministros">
+<title>Suministros Hostelería</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <img class="mini" src="logo.png" alt=""><div class="who"><b>SUMINISTROS HOSTELERÍA</b><span>Bar La Lonja · Cliente Oro</span></div>
+    <button class="iconbtn" id="cartBtn" aria-label="Ver carrito">🛒<span class="badge" id="badge"></span></button>
+  </header>
+
+  <main>
+    <!-- INICIO -->
+    <section class="view" id="v-inicio">
+      <div class="hero">
+        <div class="fan" aria-hidden="true"><i>🏁</i><i>📃</i><i>🧻</i><i>🧴</i><i>🥡</i></div>
+        <div class="wordmark">
+          <img class="logo-badge" src="logo.png" alt="Logo de Suministros Hostelería">
+        </div>
+        <div class="ribbon-wrap"><span class="ribbon">SUMINISTROS HOSTELERÍA</span></div>
+        <p>Mantelería, servilletas, desechables, limpieza y celulosa. Entrega en 24 h.</p>
+      </div>
+
+      <div class="level">
+        <div class="row">
+          <span class="medal" aria-hidden="true">🏅</span>
+          <div class="grow"><b>NIVEL ORO</b><div class="meta" id="lvlTxt"></div></div>
+        </div>
+        <div class="bar gold" role="progressbar" aria-label="Progreso al nivel Platino" id="lvlBar"><i></i></div>
+      </div>
+
+      <div class="flash">
+        <span class="big" aria-hidden="true">🗂️</span>
+        <div><b>Oferta flash · Servilleta zig-zag</b><span>Caja 6.000 uds a <b class="inline" id="flashP">23,96 €</b> · acaba en <span class="timer" id="timer">--:--:--</span></span></div>
+        <button class="btn" data-open="7">Ver</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🧭</span><h2>CATEGORÍAS</h2><a href="#catalogo">Ver todo</a></div>
+        <div class="cats" id="cats"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🏆</span><h2>LO MÁS PEDIDO</h2><span class="pill teal">Valencia · nov</span></div>
+        <div class="rank" id="rank"></div>
+      </div>
+      <p class="note">Demo con empresa, cliente, productos y precios de ejemplo.</p>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <section class="view" id="v-catalogo" hidden>
+      <h1>CATÁLOGO</h1>
+      <div class="search"><span aria-hidden="true">🔎</span><input id="q" type="search" placeholder="Buscar mantel, lejía, servilletas…" autocomplete="off" aria-label="Buscar productos"></div>
+      <div class="chips" id="chips"></div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <!-- PEDIDOS -->
+    <section class="view" id="v-pedidos" hidden>
+      <h1>MIS PEDIDOS</h1>
+      <p class="lead">Sigue tu reparto y repite un pedido con un toque.</p>
+      <div class="list" id="orders"></div>
+    </section>
+
+    <!-- CUENTA -->
+    <section class="view" id="v-cuenta" hidden>
+      <h1>MI CUENTA</h1>
+      <div class="level">
+        <div class="row">
+          <span class="medal" aria-hidden="true">⭐</span>
+          <div class="grow"><b id="ptsBig">0 PUNTOS</b><div class="meta">1 punto por cada euro (sin IVA). 500 puntos = 10 € de descuento.</div></div>
+        </div>
+        <div class="bar" role="progressbar" aria-label="Puntos hasta el próximo vale" id="ptsBar"><i></i></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🏪</span><h2>MI NEGOCIO</h2></div>
+        <div class="kv">
+          <div><span>Establecimiento</span><b>Bar La Lonja</b></div>
+          <div><span>Nº cliente</span><b>C-04127</b></div>
+          <div><span>Dirección de entrega</span><b>C/ de la Reina 21, Valencia</b></div>
+          <div><span>Forma de pago</span><b>Domiciliación 30 días</b></div>
+          <div><span>Precios con IVA</span><button class="switch" id="ivaSw" role="switch" aria-checked="false" aria-label="Mostrar precios con IVA"></button></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t"><span class="emo" aria-hidden="true">🤝</span><h2>TU COMERCIAL</h2></div>
+        <div class="rep">
+          <span class="av" aria-hidden="true">LM</span>
+          <div><b>Lucía Martí</b><span>Lunes a viernes, 8:00–16:00</span><div class="tel">600 000 000</div></div>
+          <button class="btn btn-teal" id="copyTel">Copiar</button>
+        </div>
+      </div>
+      <a class="btn btn-ghost btn-block" href="admin.html">🔑 Acceso para la empresa</a>
+      <p class="note">Datos de ejemplo. Entrega en tu local sin coste.</p>
+    </section>
+  </main>
+</div>
+
+<div class="cbar" id="cbar" hidden><button class="btn btn-gold btn-block" id="cbarBtn"><span id="cbarN">0 artículos</span><span class="tot" id="cbarT">0 €</span></button></div>
+
+<div class="tabs"><nav aria-label="Secciones">
+  <a href="#inicio" data-v="inicio"><span class="emo" aria-hidden="true">🏠</span>Inicio</a>
+  <a href="#catalogo" data-v="catalogo"><span class="emo" aria-hidden="true">📦</span>Catálogo</a>
+  <a href="#pedidos" data-v="pedidos"><span class="emo" aria-hidden="true">🚚</span>Pedidos</a>
+  <a href="#cuenta" data-v="cuenta"><span class="emo" aria-hidden="true">👤</span>Cuenta</a>
+</nav></div>
+
+<div class="shade" id="shade"></div>
+
+<aside class="sheet" id="cartSheet" aria-label="Carrito">
+  <div class="grab"><div class="sec-t"><span class="emo" aria-hidden="true">🛒</span><h2>TU PEDIDO</h2><button class="x" data-close aria-label="Cerrar">×</button></div></div>
+  <ul class="lines" id="lines"></ul>
+  <div id="cartBody" class="stack">
+    <div class="field">FRANJA DE ENTREGA
+      <div class="slots" id="slots"></div>
+    </div>
+    <label class="field" for="notes">NOTAS PARA EL REPARTIDOR<input id="notes" placeholder="Entrar por la puerta del almacén"></label>
+    <div class="sum" id="sum"></div>
+    <button class="btn btn-gold btn-block" id="confirmBtn">CONFIRMAR PEDIDO</button>
+  </div>
+</aside>
+
+<aside class="sheet" id="detSheet" aria-label="Producto">
+  <div class="grab"><div class="sec-t"><span class="emo" aria-hidden="true">🔍</span><h2>PRODUCTO</h2><button class="x" data-close aria-label="Cerrar">×</button></div></div>
+  <div id="det" class="stack"></div>
+</aside>
+
+<div class="win" id="win" hidden>
+  <div class="confetti" id="confetti"></div>
+  <div class="win-card">
+    <span class="crown" aria-hidden="true">👑</span>
+    <h2>¡PEDIDO HECHO!</h2>
+    <span class="onum" id="winNum"></span>
+    <p id="winTxt"></p>
+    <span class="pts" id="winPts"></span>
+    <button class="btn btn-gold btn-block" id="winBtn">VER MIS PEDIDOS</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="datos.js"></script>
+<script>
+(function(){
+const IVA=0.21;
+const {CATS,P}=window.SH_DATA;
+const catBg=Object.fromEntries(CATS.map(c=>[c[0],c[3]]));
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+const RANK=[[5,412],[13,377],[17,298],[1,251],[15,190]];
+const SLOTS=[['Mañana','8–11 h'],['Mañana','11–14 h'],['Jueves','8–11 h']];
+let orders=window.SH_DATA.ORDERS.map(o=>({...o}));
+const $=s=>document.querySelector(s);
+const eur=n=>n.toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cart={}, cat='todo', q='', iva=true, slot=0, points=1840;
+try{const s=JSON.parse(localStorage.getItem('sh-pedidos')||'{}');cart=s.cart||{};iva=s.ivaIncl!==undefined?!!s.ivaIncl:true;if(s.points)points=s.points;if(s.orders)orders=s.orders}catch(e){}
+const save=()=>{try{localStorage.setItem('sh-pedidos',JSON.stringify({cart,ivaIncl:iva,points,orders}))}catch(e){}};
+const show=v=>iva?v*(1+IVA):v;
+const sumItems=it=>it.reduce((s,[id,n])=>s+byId[id].p*n,0);
+const items=()=>Object.entries(cart).filter(([,n])=>n>0).map(([id,n])=>[+id,n]);
+
+function stepper(id,n){return `<div class="step"><button class="minus" data-dec="${id}" aria-label="Quitar uno">−</button><output>${n}</output><button class="plus" data-inc="${id}" aria-label="Añadir uno">+</button></div>`}
+function card(p){
+  const n=cart[p.id]||0, cls=p.out?'':p.o?' hl':p.low?' low':'';
+  const tag=p.out?'<span class="pill out">Agotado</span>':p.o?`<span class="pill gold">-${Math.round((1-p.p/p.o)*100)} %</span>`:p.low?`<span class="pill coral">Quedan ${p.low}</span>`:'';
+  return `<article class="pcard${cls}"><button class="thumb" style="background:${catBg[p.cat]}" data-open="${p.id}" aria-label="Ver ficha de ${esc(p.n)}">${p.e}</button>
+  <div class="pbody"><div class="tags"><span class="ref">${p.ref}</span>${tag}</div><h3>${p.n}</h3><span class="meta">${p.f}</span>
+  <div class="prow"><div class="price">${eur(show(p.p))}${p.o?`<s>${eur(show(p.o))}</s>`:''}<small>${iva?'IVA incluido':'+ IVA'}</small></div>
+  ${p.out?'<button class="btn btn-ghost add" disabled>Agotado</button>':n?stepper(p.id,n):`<button class="btn btn-teal add" data-inc="${p.id}">Añadir</button>`}</div></div></article>`;
+}
+function renderList(){
+  const t=q.trim().toLowerCase();
+  const l=P.filter(p=>(cat==='todo'||p.cat===cat)&&(!t||(p.n+' '+p.f+' '+p.ref).toLowerCase().includes(t)));
+  $('#list').innerHTML=l.length?l.map(card).join(''):`<div class="empty"><span class="emo">🤔</span>No hay productos con «${esc(q)}». Prueba con «mantel» o «lejía».</div>`;
+}
+function renderChips(){
+  $('#chips').innerHTML=[['todo','Todo','✨'],...CATS].map(([k,l,e])=>`<button class="chip" data-cat="${k}" aria-pressed="${k===cat}">${e} ${l}</button>`).join('');
+}
+function renderHome(){
+  $('#flashP').textContent=eur(show(byId[7].p))+(iva?'':' + IVA');
+  $('#cats').innerHTML=CATS.map(([k,l,e,bg])=>`<button class="cat" data-gocat="${k}"><span class="emo" style="background:${bg}">${e}</span>${l}<small>${P.filter(p=>p.cat===k).length} productos</small></button>`).join('');
+  const medal=['👑','🥈','🥉'];
+  $('#rank').innerHTML=RANK.map(([id,u],i)=>{const p=byId[id];return `<button class="ritem${i<3?' r'+(i+1):''}" data-open="${id}">
+    <span class="pos">${i===0?'<span class="crown">👑</span>':i<3?medal[i]:i+1}</span><span class="av">${p.e}</span>
+    <span class="nm">${p.n}<small>${p.f}</small></span><span class="sc">${u}</span></button>`}).join('');
+  const goal=2500, pct=Math.min(100,points/goal*100);
+  $('#lvlTxt').innerHTML=`Te faltan <b>${eur(Math.max(0,goal-points))}</b> este año para <b>Platino</b> (−3 % en todo)`;
+  $('#lvlBar i').style.width=pct+'%';
+  $('#ptsBig').textContent=points.toLocaleString('es-ES')+' PUNTOS';
+  $('#ptsBar i').style.width=(points%500)/5+'%';
+  $('#ivaSw').setAttribute('aria-checked',iva);
+}
+const ST={reparto:['🚚 En reparto','sky'],prep:['📦 Preparando','gold'],ok:['✔ Entregado','ok']};
+function renderOrders(){
+  $('#orders').innerHTML=orders.map((o,i)=>{const [lbl,c]=ST[o.st], base=sumItems(o.items), u=o.items.reduce((s,[,n])=>s+n,0);
+    const step=o.st==='prep'?1:o.st==='reparto'?3:4;
+    return `<div class="ocard${o.st!=='ok'?' live':''}"><div class="ohead"><b>${o.n}</b><span class="pill ${c}">${lbl}</span></div>
+    ${o.st!=='ok'?`<div class="track">${['Recibido','Preparado','En ruta','Entregado'].map((s,k)=>`<div class="${k<step?'done':''}"><i></i>${s}</div>`).join('')}</div>`:''}
+    <p>${o.d} · ${u} uds · ${o.items.map(([id,n])=>`${n}× ${byId[id].n}`).join(' · ')}</p>
+    <div class="ofoot"><span class="price">${eur(base*(1+IVA))}<small>IVA incluido</small></span><button class="btn btn-ghost" data-repeat="${i}">🔁 Repetir</button></div></div>`}).join('');
+}
+function renderCart(){
+  const it=items(), u=it.reduce((s,[,n])=>s+n,0), base=sumItems(it), tot=base*(1+IVA);
+  const b=$('#badge'); if(b.textContent!==String(u||'')){b.textContent=u||'';b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}
+  $('#cbar').hidden=!u; $('#app').classList.toggle('has-cart',!!u);
+  $('#cbarN').textContent=`🛒 ${u} ${u===1?'artículo':'artículos'}`; $('#cbarT').textContent=eur(tot);
+  $('#lines').innerHTML=it.length?it.map(([id,n])=>{const p=byId[id];return `<li><span class="thumb" style="background:${catBg[p.cat]}">${p.e}</span><span class="nm">${p.n}<small>${n} × ${eur(show(p.p))} = ${eur(show(p.p*n))} ${iva?'IVA incl.':'+ IVA'}</small></span>${stepper(id,n)}</li>`}).join('')
+    :`<li class="empty"><span class="emo">🍽️</span>Tu pedido está vacío. Añade productos desde el catálogo.</li>`;
+  $('#cartBody').hidden=!it.length;
+  $('#slots').innerHTML=SLOTS.map(([d,h],i)=>`<button data-slot="${i}" aria-pressed="${i===slot}">${d}<small>${h}</small></button>`).join('');
+  $('#sum').innerHTML=`<div><span>Base imponible</span><span>${eur(base)}</span></div>
+    <div><span>IVA 21 %</span><span>${eur(base*IVA)}</span></div><div class="big"><span>Total</span><span>${eur(tot)}</span></div>`;
+}
+function renderDetail(id){
+  const p=byId[id], n=cart[id]||0;
+  $('#det').innerHTML=`<div class="dart" style="background:${catBg[p.cat]}">${p.e}</div>
+  <div class="dinfo"><div class="tags"><span class="ref">REF. ${p.ref}</span>${p.o?'<span class="pill gold">Oferta flash</span>':''}${p.low?`<span class="pill coral">Quedan ${p.low}</span>`:''}</div>
+  <h3>${p.n}</h3><span class="meta">${p.f}</span></div>
+  <div class="specs">${p.s.map(([k,v])=>`<div><span>${k.toUpperCase()}</span><b>${v}</b></div>`).join('')}</div>
+  <div class="dbuy"><div class="price">${eur(show(p.p))}${p.o?`<s>${eur(show(p.o))}</s>`:''}<small>${iva?'IVA incluido':'+ IVA'}</small></div>
+  ${p.out?'<button class="btn btn-ghost" disabled>AGOTADO</button>':n?stepper(id,n):`<button class="btn btn-gold" data-inc="${id}">AÑADIR AL PEDIDO</button>`}</div>`;
+}
+let detId=null;
+function renderAll(){renderList();renderCart();if(detId)renderDetail(detId)}
+
+let tt; function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),1800)}
+function sheet(id){['#cartSheet','#detSheet'].forEach(s=>$(s).classList.toggle('on',s===id));$('#shade').classList.toggle('on',!!id);if(id!=='#detSheet')detId=null}
+function change(id,d){if(d>0&&byId[id].out)return;cart[id]=Math.max(0,(cart[id]||0)+d);if(!cart[id])delete cart[id];save();renderAll();if(d>0&&cart[id]===1)toast(`${byId[id].e} Añadido al pedido`)}
+
+function confirmOrder(){
+  const it=items(); if(!it.length) return;
+  const base=sumItems(it), num='SH-'+(25842+Math.floor(Math.random()*90));
+  const now=new Date();orders.unshift({n:num,d:'hoy',h:now.toTimeString().slice(0,5),st:'prep',items:it,slot:SLOTS[slot].join(' '),notes:$('#notes').value.trim()});$('#notes').value=''; const earned=Math.floor(base); points+=earned;
+  cart={}; save(); sheet(null); renderAll(); renderOrders(); renderHome();
+  $('#winNum').textContent=num;
+  $('#winTxt').textContent=`Llega ${SLOTS[slot][0].toLowerCase()} entre las ${SLOTS[slot][1]}. Te avisaremos cuando salga el camión.`;
+  $('#winPts').textContent=`+${earned} puntos ⭐`;
+  const cols=['#2BA8A2','#FFD23F','#EF6C4A','#5DADE2','#3CC4BD','#FFE47A'];
+  $('#confetti').innerHTML=Array.from({length:14},(_,i)=>{const w=6+Math.random()*8,h=Math.random()<.4?w:w*1.8;
+    return `<i style="left:${4+i*6.8}%;width:${w}px;height:${h}px;background:${cols[i%6]};border-radius:${i%3===0?'50%':'2px'};animation-duration:${(3.2+Math.random()*1.3).toFixed(2)}s;animation-delay:${(Math.random()*1.5).toFixed(2)}s"></i>`}).join('');
+  $('#win').hidden=false;
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button,[data-close]'); if(!b) return;
+  const d=b.dataset;
+  if(d.inc) change(+d.inc,1);
+  else if(d.dec) change(+d.dec,-1);
+  else if(d.cat){cat=d.cat;renderChips();renderList()}
+  else if(d.gocat){cat=d.gocat;renderChips();renderList();location.hash='catalogo'}
+  else if(d.open){detId=+d.open;renderDetail(detId);sheet('#detSheet')}
+  else if(d.slot!==undefined){slot=+d.slot;renderCart()}
+  else if(d.repeat!==undefined){orders[+d.repeat].items.forEach(([id,n])=>{if(!byId[id].out)cart[id]=(cart[id]||0)+n});save();renderAll();sheet('#cartSheet');toast('🔁 Pedido cargado: ajusta cantidades')}
+  else if(b.hasAttribute('data-close')) sheet(null);
+});
+$('#cartBtn').onclick=()=>sheet('#cartSheet');
+$('#cbarBtn').onclick=()=>sheet('#cartSheet');
+$('#shade').onclick=()=>sheet(null);
+$('#confirmBtn').onclick=confirmOrder;
+$('#winBtn').onclick=()=>{$('#win').hidden=true;location.hash='pedidos'};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){sheet(null);$('#win').hidden=true}});
+$('#q').addEventListener('input',e=>{q=e.target.value;renderList()});
+$('#ivaSw').onclick=()=>{iva=!iva;save();renderHome();renderAll();toast(iva?'Precios con IVA':'Precios sin IVA')};
+$('#copyTel').onclick=()=>{try{navigator.clipboard.writeText('600000000').then(()=>toast('📋 Teléfono copiado'),()=>toast('Mantén pulsado el número para copiarlo'))}catch(err){toast('Mantén pulsado el número para copiarlo')}};
+
+// Cuenta atrás de la oferta flash (termina a medianoche)
+function tick(){const now=new Date(),end=new Date(now);end.setHours(24,0,0,0);let s=Math.floor((end-now)/1000);
+  const h=String(Math.floor(s/3600)).padStart(2,'0'),m=String(Math.floor(s%3600/60)).padStart(2,'0'),x=String(s%60).padStart(2,'0');$('#timer').textContent=`${h}:${m}:${x}`}
+tick();setInterval(tick,1000);
+
+const VIEWS=['inicio','catalogo','pedidos','cuenta'];
+function route(){const v=(location.hash||'#inicio').slice(1), ok=VIEWS.includes(v)?v:'inicio';
+  VIEWS.forEach(k=>$('#v-'+k).hidden=k!==ok);
+  document.querySelectorAll('.tabs a').forEach(a=>a.dataset.v===ok?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+  window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);
+
+renderChips();renderHome();renderOrders();renderAll();route();
+})();
+</script>
+</body>
+</html>
