@@ -398,3 +398,8 @@ body.locked .app,body.locked .tabs{visibility:hidden}
   .fact th,.fact td{padding:8px 4px}
   .fact-num{text-align:left;flex-basis:100%}
 }
+
+/* Carrito de la cabecera: icono dibujado, nítido en cualquier móvil */
+.iconbtn.cart{background:#FFF8E7;box-shadow:0 2px 0 #123B39}
+.iconbtn.cart svg{width:24px;height:24px;fill:none;stroke:#1E8C86;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn.cart svg circle{fill:#1E8C86;stroke:none}
