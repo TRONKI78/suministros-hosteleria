@@ -143,13 +143,15 @@
     <span class="onum" id="winNum"></span>
     <p id="winTxt"></p>
     <span class="pts" id="winPts"></span>
-    <button class="btn btn-gold btn-block" id="winBtn">VER MIS PEDIDOS</button>
+    <button class="btn btn-gold btn-block" id="winFact">🧾 VER FACTURA</button>
+    <button class="btn btn-ghost btn-block" id="winBtn">Ver mis pedidos</button>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
 
 <script src="datos.js"></script>
+<script src="factura.js"></script>
 <script>
 (function(){
 const IVA=0.21;
@@ -157,6 +159,7 @@ const {CATS,P}=window.SH_DATA;
 const catBg=Object.fromEntries(CATS.map(c=>[c[0],c[3]]));
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
 const RANK=[[5,412],[13,377],[17,298],[1,251],[15,190]];
+const CLIENTE='Bar La Lonja';
 const SLOTS=[['Mañana','8–11 h'],['Mañana','11–14 h'],['Jueves','8–11 h']];
 let orders=window.SH_DATA.ORDERS.map(o=>({...o}));
 const $=s=>document.querySelector(s);
@@ -207,7 +210,7 @@ function renderOrders(){
     return `<div class="ocard${o.st!=='ok'?' live':''}"><div class="ohead"><b>${o.n}</b><span class="pill ${c}">${lbl}</span></div>
     ${o.st!=='ok'?`<div class="track">${['Recibido','Preparado','En ruta','Entregado'].map((s,k)=>`<div class="${k<step?'done':''}"><i></i>${s}</div>`).join('')}</div>`:''}
     <p>${o.d} · ${u} uds · ${o.items.map(([id,n])=>`${n}× ${byId[id].n}`).join(' · ')}</p>
-    <div class="ofoot"><span class="price">${eur(base*(1+IVA))}<small>IVA incluido</small></span><button class="btn btn-ghost" data-repeat="${i}">🔁 Repetir</button></div></div>`}).join('');
+    <div class="ofoot"><span class="price">${eur(base*(1+IVA))}<small>IVA incluido</small></span><div class="oacts"><button class="btn btn-ghost" data-fact="${i}">🧾 Factura</button><button class="btn btn-ghost" data-repeat="${i}">🔁 Repetir</button></div></div></div>`}).join('');
 }
 function renderCart(){
   const it=items(), u=it.reduce((s,[,n])=>s+n,0), base=sumItems(it), tot=base*(1+IVA);
@@ -240,7 +243,7 @@ function change(id,d){if(d>0&&byId[id].out)return;cart[id]=Math.max(0,(cart[id]|
 function confirmOrder(){
   const it=items(); if(!it.length) return;
   const base=sumItems(it), num='SH-'+(25842+Math.floor(Math.random()*90));
-  const now=new Date();orders.unshift({n:num,d:'hoy',h:now.toTimeString().slice(0,5),st:'prep',items:it,slot:SLOTS[slot].join(' '),notes:$('#notes').value.trim()});$('#notes').value=''; const earned=Math.floor(base); points+=earned;
+  const now=new Date();orders.unshift({n:num,d:'hoy',fecha:now.toISOString(),h:now.toTimeString().slice(0,5),st:'prep',items:it,precios:Object.fromEntries(it.map(([id])=>[id,byId[id].p])),slot:SLOTS[slot].join(' '),notes:$('#notes').value.trim()});$('#notes').value=''; const earned=Math.floor(base); points+=earned;
   cart={}; save(); sheet(null); renderAll(); renderOrders(); renderHome();
   $('#winNum').textContent=num;
   $('#winTxt').textContent=`Llega ${SLOTS[slot][0].toLowerCase()} entre las ${SLOTS[slot][1]}. Te avisaremos cuando salga el camión.`;
@@ -260,6 +263,7 @@ document.addEventListener('click',e=>{
   else if(d.gocat){cat=d.gocat;renderChips();renderList();location.hash='catalogo'}
   else if(d.open){detId=+d.open;renderDetail(detId);sheet('#detSheet')}
   else if(d.slot!==undefined){slot=+d.slot;renderCart()}
+  else if(d.fact!==undefined) window.SH_FACTURA.abrir(orders[+d.fact],CLIENTE);
   else if(d.repeat!==undefined){orders[+d.repeat].items.forEach(([id,n])=>{if(!byId[id].out)cart[id]=(cart[id]||0)+n});save();renderAll();sheet('#cartSheet');toast('🔁 Pedido cargado: ajusta cantidades')}
   else if(b.hasAttribute('data-close')) sheet(null);
 });
@@ -268,6 +272,7 @@ $('#cbarBtn').onclick=()=>sheet('#cartSheet');
 $('#shade').onclick=()=>sheet(null);
 $('#confirmBtn').onclick=confirmOrder;
 $('#winBtn').onclick=()=>{$('#win').hidden=true;location.hash='pedidos'};
+$('#winFact').onclick=()=>{$('#win').hidden=true;location.hash='pedidos';window.SH_FACTURA.abrir(orders[0],CLIENTE)};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){sheet(null);$('#win').hidden=true}});
 $('#q').addEventListener('input',e=>{q=e.target.value;renderList()});
 $('#ivaSw').onclick=()=>{iva=!iva;save();renderHome();renderAll();toast(iva?'Precios con IVA':'Precios sin IVA')};

@@ -29,7 +29,6 @@
 .olines li{display:flex;justify-content:space-between;gap:var(--s-sm)}
 .olines li span:last-child{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
 .onote{font-size:12px;background:var(--cream);border-radius:var(--r-md);padding:6px 10px}
-.oacts{display:flex;gap:var(--s-sm);flex-wrap:wrap}
 .btn-sky{background:var(--sky);color:#fff;box-shadow:var(--sh-sky)}
 .btn-ok{background:var(--success);color:#fff;box-shadow:0 2px 10px rgba(39,174,96,.3)}
 .prod{display:grid;grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"t n n" "t p s";align-items:center;column-gap:var(--s-md);row-gap:6px;background:var(--card);border-radius:var(--r-lg);box-shadow:var(--sh-card);padding:10px var(--s-md);border-left:3px solid var(--primary-light)}
@@ -53,12 +52,24 @@
 .hint a{color:var(--primary-dark);font-weight:700}
 </style>
 </head>
-<body>
+<body class="locked">
+<div class="lock" id="lock">
+  <form id="lockForm" autocomplete="off">
+    <img src="logo.png" alt="Logo de Suministros Hostelería">
+    <h1>ACCESO EMPRESA</h1>
+    <p>Introduce la contraseña para ver los pedidos.</p>
+    <label class="field" for="pass">CONTRASEÑA<input id="pass" type="password" autocomplete="current-password" required></label>
+    <span class="err" id="passErr" role="alert"></span>
+    <button class="btn btn-gold btn-block" type="submit">ENTRAR</button>
+    <a href="index.html" class="meta">← Volver a la app de pedidos</a>
+  </form>
+</div>
 <div class="app">
   <header class="top">
     <img class="mini" src="logo.png" alt="">
     <div class="who"><b>PANEL EMPRESA</b><span>Suministros Hostelería</span></div>
     <a class="iconbtn back" href="index.html" aria-label="Ver la app del cliente" title="Ver la app del cliente">📱</a>
+    <button class="iconbtn" id="logout" aria-label="Cerrar sesión" title="Cerrar sesión">🔒</button>
   </header>
 
   <main>
@@ -120,6 +131,7 @@
 <div class="toast" id="toast" role="status"></div>
 
 <script src="datos.js"></script>
+<script src="factura.js"></script>
 <script>
 (function(){
 const IVA=0.21;
@@ -173,7 +185,7 @@ function ocard(o){
   <div class="ohead"><span class="cli">${esc(o.cli)}${isNew?' <span class="pill coral">NUEVO</span>':''}</span><span class="meta">${esc(o.h)}</span></div>
   <ul class="olines">${o.items.map(([id,n])=>`<li><span>${n} × ${byId[id].n}</span><span>${(byId[id].p*n*(1+IVA)).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</span></li>`).join('')}</ul>
   <p>🕗 Entrega: ${esc(o.slot)}</p>${o.notes?`<div class="onote">📝 ${esc(o.notes)}</div>`:''}
-  <div class="ofoot"><span class="price">${eur(total(o.items))}<small>IVA incluido</small></span>${act?`<div class="oacts">${act}</div>`:''}</div></div>`;
+  <div class="ofoot"><span class="price">${eur(total(o.items))}<small>IVA incluido</small></span><div class="oacts"><button class="btn btn-ghost" data-fact="${o.n}">🧾 Factura</button>${act}</div></div></div>`;
 }
 function renderHoy(){
   const all=allOrders(), hoy=all.filter(o=>o.hoy), v=hoy.reduce((s,o)=>s+total(o.items),0);
@@ -218,6 +230,7 @@ let tt; function toast(t){const el=$('#toast');el.textContent=t;el.classList.add
 document.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return; const d=b.dataset;
   if(d.st){const o=allOrders().find(x=>x.n===d.n); if(o){setSt(o,d.st);renderAll();toast(d.st==='reparto'?`🚚 ${o.n} sale a reparto`:`✔ ${o.n} entregado`)}}
+  else if(d.fact){const o=allOrders().find(x=>x.n===d.fact); if(o) window.SH_FACTURA.abrir(o,o.cli)}
   else if(d.f){filtro=d.f;renderPedidos()}
   else if(d.av){const p=byId[d.av];p.out=!p.out;saveCat();renderProductos();toast(p.out?`${p.e} ${p.n}: agotado`:`${p.e} ${p.n}: disponible`)}
 });
@@ -230,6 +243,22 @@ document.addEventListener('change',e=>{
 $('#pq').addEventListener('input',e=>{pq=e.target.value;renderProductos()});
 $('#resetCat').onclick=()=>{P.forEach(p=>{p.p=ORIG[p.id];p.out=false});store('sh-catalogo',{});renderAll();toast('↩️ Precios originales restaurados')};
 window.addEventListener('storage',renderAll);
+
+// Acceso con contraseña. Solo se guarda la huella SHA-256 de la contraseña, no la contraseña.
+// Ojo: en una web sin servidor esto es una protección básica; para datos reales hace falta login en servidor.
+const PASS_HASH='17eeaef3857ec08e11213d8bee9ed740edd012e9ec80f4685d3e66a5d56a71be';
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function unlock(){document.body.classList.remove('locked');$('#lock').hidden=true}
+function lock(){try{sessionStorage.removeItem('sh-admin-ok')}catch(e){}document.body.classList.add('locked');$('#lock').hidden=false;$('#pass').value='';$('#passErr').textContent='';$('#pass').focus()}
+let ok=false; try{ok=sessionStorage.getItem('sh-admin-ok')===PASS_HASH}catch(e){}
+if(ok) unlock(); else $('#pass').focus();
+$('#lockForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  let h=''; try{h=await sha256($('#pass').value)}catch(err){$('#passErr').textContent='Abre el panel desde la dirección https de la web.';return}
+  if(h===PASS_HASH){try{sessionStorage.setItem('sh-admin-ok',h)}catch(err){}unlock();toast('🔓 Bienvenido')}
+  else{$('#passErr').textContent='Contraseña incorrecta. Inténtalo de nuevo.';const l=$('#lock');l.classList.remove('shake');void l.offsetWidth;l.classList.add('shake');$('#pass').select()}
+});
+$('#logout').onclick=lock;
 
 const d=new Date(), h=d.getHours();
 $('#hello').textContent=h<14?'BUENOS DÍAS':h<21?'BUENAS TARDES':'BUENAS NOCHES';

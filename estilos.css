@@ -341,3 +341,60 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
 @media (min-width:1080px){
   .list{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* Factura: hoja blanca como el papel, también en modo oscuro */
+.fact-wrap{position:fixed;inset:0;z-index:80;overflow-y:auto;background:rgba(10,30,29,.6);
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.fact-acts{max-width:760px;margin:0 auto 12px;display:flex;gap:var(--s-sm);flex-wrap:wrap}
+.fact-acts .btn{flex:1 1 180px}
+.fact{max-width:760px;margin:0 auto;background:#fff;color:#123B39;border-radius:var(--r-lg);padding:24px clamp(16px,4vw,36px);box-shadow:var(--sh-lg);display:flex;flex-direction:column;gap:18px;font-size:13px}
+.fact-head{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;padding-bottom:16px;border-bottom:3px solid #2BA8A2}
+.fact-head img{width:56px;height:56px;border-radius:50%;background:#000;flex:none}
+.fact-head>div:nth-child(2){flex:1 1 200px}
+.fact-head b{display:block;font-size:16px;font-weight:800}
+.fact-head span{color:#5B7775;font-size:12px}
+.fact-num{text-align:right;display:flex;flex-direction:column}
+.fact-num span:first-child{font-size:11px;font-weight:800;letter-spacing:3px;color:#1E8C86}
+.fact-num b{font-size:18px;font-weight:800;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.fact-parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fact-parts>div{background:#FFF8E7;border-radius:var(--r-md);padding:10px 14px;line-height:1.5}
+.fact-parts span{display:block;font-size:10px;font-weight:800;letter-spacing:2px;color:#1E8C86}
+.fact-parts b{display:block;font-size:14px}
+.fact-tw{overflow-x:auto}
+.fact table{width:100%;border-collapse:collapse;min-width:460px;font-variant-numeric:tabular-nums}
+.fact th{text-align:left;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5B7775;padding:8px 6px;border-bottom:1.5px solid #CFE6E4}
+.fact td{padding:8px 6px;border-bottom:1px dashed #CFE6E4;vertical-align:top}
+.fact td small{display:block;color:#5B7775;font-size:11px}
+.fact .r{text-align:right;white-space:nowrap}
+.fact-tot{align-self:flex-end;width:min(100%,280px);display:flex;flex-direction:column;gap:6px;font-variant-numeric:tabular-nums}
+.fact-tot div{display:flex;justify-content:space-between;color:#5B7775}
+.fact-tot .big{color:#123B39;font-size:18px;font-weight:800;padding-top:8px;border-top:3px solid #2BA8A2}
+.fact-pie{margin:0;font-size:11px;color:#5B7775;border-top:1.5px dashed #CFE6E4;padding-top:12px}
+body.fact-open{overflow:hidden}
+@media print{
+  body.fact-open>*:not(.fact-wrap){display:none!important}
+  body.fact-open{background:#fff;overflow:visible}
+  .fact-wrap{position:static;background:none;padding:0;overflow:visible}
+  .fact-acts{display:none}
+  .fact{box-shadow:none;border-radius:0;max-width:none;padding:0}
+}
+
+/* Acceso con contraseña al panel de la empresa */
+.lock{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:linear-gradient(160deg,var(--primary),var(--primary-dark));
+  padding:24px max(20px,env(safe-area-inset-right,0px)) 24px max(20px,env(safe-area-inset-left,0px))}
+.lock form{width:100%;max-width:360px;background:var(--card);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:28px 22px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.lock img{width:96px;height:96px;border-radius:50%;background:#000;border:3px solid #FFF8E7;box-shadow:0 4px 0 #123B39}
+.lock h1{margin:0;font-size:20px;font-weight:800;letter-spacing:2px;color:var(--primary-dark)}
+.lock p{margin:0;color:var(--muted);font-size:13px}
+.lock .field{width:100%;text-align:left}
+.lock .err{color:var(--error);font-weight:700;font-size:13px;min-height:1.2em}
+.lock.shake form{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+body.locked .app,body.locked .tabs{visibility:hidden}
+.oacts{display:flex;gap:var(--s-sm);flex-wrap:wrap}
+@media (max-width:520px){
+  .fact table{min-width:0}
+  .fact th:first-child,.fact td:first-child{display:none}
+  .fact th,.fact td{padding:8px 4px}
+  .fact-num{text-align:left;flex-basis:100%}
+}
