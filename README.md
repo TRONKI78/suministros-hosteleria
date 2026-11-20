@@ -10,6 +10,13 @@ App móvil de pedidos para una empresa de suministros de hostelería: mantelerí
 
 En esta demo los datos se guardan en el navegador del dispositivo. La contraseña del panel se comprueba en el navegador (solo se guarda su huella SHA-256): es una protección básica; para uso real hace falta un inicio de sesión en servidor. Clientes, productos y precios son de ejemplo.
 
+## Dirección publicada
+
+- App del cliente: https://suministros-hosteleria-k1fy.vercel.app
+- Panel de la empresa: https://suministros-hosteleria-k1fy.vercel.app/admin.html
+
+Cada cambio que se sube a `main` se publica solo en Vercel.
+
 ## Publicar en Vercel
 
 Archivos estáticos, sin build: importa el repositorio en Vercel con Framework Preset «Other» y pulsa Deploy.
