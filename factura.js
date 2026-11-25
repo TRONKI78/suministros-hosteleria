@@ -48,7 +48,7 @@ function abrir(o,cliente){
   cerrar();
   var w=document.createElement('div'); w.className='fact-wrap'; w.id='factWrap';
   w.setAttribute('role','dialog'); w.setAttribute('aria-label','Factura del pedido '+o.n);
-  w.innerHTML='<div class="fact-acts"><button class="btn btn-gold" id="factPrint">🖨️ Imprimir o guardar PDF</button><button class="btn btn-ghost" id="factClose">Cerrar</button></div>'+html(o,cliente);
+  w.innerHTML='<div class="fact-acts"><button class="btn btn-primary" id="factPrint">Imprimir o guardar PDF</button><button class="btn btn-ghost" id="factClose">Cerrar</button></div>'+html(o,cliente);
   document.body.appendChild(w); document.body.classList.add('fact-open');
   w.querySelector('#factClose').onclick=cerrar;
   w.querySelector('#factPrint').onclick=function(){window.print()};

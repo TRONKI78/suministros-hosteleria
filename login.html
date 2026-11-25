@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B7F7A">
+<meta name="robots" content="noindex, nofollow">
+<title>Acceso empresa · Suministros Hostelería</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body class="login-page">
+<main class="lock">
+  <form id="lockForm" autocomplete="on" novalidate>
+    <img src="logo.png" alt="Logo de Suministros Hostelería">
+    <h1>Acceso empresa</h1>
+    <p>Introduce la contraseña para entrar en el panel de control.</p>
+    <label class="field" for="pass">Contraseña<input id="pass" name="password" type="password" autocomplete="current-password" maxlength="200" required></label>
+    <span class="err" id="passErr" role="alert"></span>
+    <button class="btn btn-primary btn-block" type="submit" id="go">Entrar</button>
+    <a href="index.html" class="meta">← Volver a la app de pedidos</a>
+  </form>
+</main>
+<script src="login.js"></script>
+</body>
+</html>
