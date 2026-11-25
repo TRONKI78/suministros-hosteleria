@@ -484,3 +484,8 @@ a.btn{text-decoration:none}
 .dash .seg button[aria-pressed="true"] span{background:rgba(255,255,255,.2);color:#fff}
 .dash .tb-btn{border:1.5px solid var(--btn-edge)}
 .dash .side-nav a,.dash .side-nav button{font-weight:600}
+
+/* Logo de la portada (Nelmar): tarjeta blanca delante del abanico */
+.logo-card{width:min(330px,88vw);max-width:100%;background:#fff;border:2px solid #123B39;border-radius:14px;padding:10px 14px;box-shadow:0 4px 0 #123B39,0 8px 24px rgba(0,0,0,.18)}
+.logo-card img{display:block;width:100%;height:auto}
+.hero .wordmark{margin-top:-40px}
