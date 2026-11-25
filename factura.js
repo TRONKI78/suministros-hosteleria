@@ -2,7 +2,7 @@
 // Datos fiscales de ejemplo: sustituir por los reales de la empresa y de cada cliente.
 (function(){
 var IVA=0.21;
-var EMPRESA={nombre:'Suministros Hostelería S.L.',nif:'B-00000000',dir:'Polígono Industrial, nave 0',cp:'46000 Valencia',tel:'600 000 000'};
+var EMPRESA={nombre:'Nelmar Papel Industrial y Suministros S.L.',nif:'B-00000000',dir:'Polígono Industrial, nave 0',cp:'46000 Valencia',tel:'600 000 000'};
 var CLIENTES={
   'Bar La Lonja':{nif:'B-12345678',dir:'C/ de la Reina 21',cp:'46011 Valencia',num:'C-04127'},
   'Restaurante El Pinar':{nif:'B-23456789',dir:'C/ de Emili Baró 14',cp:'46020 Valencia',num:'C-03018'},
