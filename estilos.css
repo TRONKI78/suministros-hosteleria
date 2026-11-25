@@ -448,3 +448,39 @@ body.fact-open{overflow:hidden}
 .x{border-radius:10px;box-shadow:none;border:1px solid var(--line)}
 .switch{transition:background-color .2s}
 a.btn{text-decoration:none}
+
+/* ===== Botones más resaltados: borde y texto oscuros para que se vean mejor ===== */
+:root{--btn-edge:#1C2B2A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--btn-edge:#DDEBEA}}
+:root[data-theme="dark"]{--btn-edge:#DDEBEA}
+.btn{font-weight:700;border:1.5px solid var(--btn-edge)}
+.btn-primary,.dash .btn-primary{background:#17706B;color:#fff;border-color:var(--btn-edge);box-shadow:0 2px 0 var(--btn-edge)}
+.btn-primary:hover,.dash .btn-primary:hover{background:#125C58}
+.btn-soft{background:var(--primary-bg);color:var(--ink);border-color:var(--btn-edge)}
+.btn-ghost,.dash .btn-ghost{background:var(--card);color:var(--ink);border-color:var(--btn-edge)}
+.dash .btn-ghost{color:var(--d-ink)}
+.btn-ghost:hover,.btn-soft:hover{background:var(--primary-bg);color:var(--ink)}
+.btn:active{box-shadow:none;transform:translateY(2px)}
+.btn:disabled{border-color:var(--line);box-shadow:none}
+.flash .btn{border-color:#123B39}
+.step{border:1.5px solid var(--btn-edge)}
+.step .minus{color:var(--ink)}
+.step .plus{background:#17706B}
+.chip{border:1.5px solid var(--btn-edge);color:var(--ink);font-weight:700}
+.chip[aria-pressed="true"]{background:#17706B;border-color:var(--btn-edge);color:#fff}
+.slots button{border:1.5px solid var(--btn-edge);color:var(--ink)}
+.slots button[aria-pressed="true"]{background:#17706B;color:#fff;border-color:var(--btn-edge)}
+.slots button[aria-pressed="true"] small{color:#fff}
+.cat{border:1.5px solid var(--btn-edge)}
+.x{border:1.5px solid var(--btn-edge);color:var(--ink)}
+.tabs nav{border:1.5px solid var(--btn-edge)}
+.tabs a{color:var(--ink)}
+.tabs a[aria-current="page"]{background:#17706B;color:#fff}
+.iconbtn.cart{border:1.5px solid #123B39}
+.cbar button{border-color:#0F2A28}
+.dash .seg{border:1.5px solid var(--btn-edge)}
+.dash .seg button{color:var(--d-ink);font-weight:600}
+.dash .seg button[aria-pressed="true"]{background:#17706B;color:#fff}
+.dash .seg button[aria-pressed="true"] span{background:rgba(255,255,255,.2);color:#fff}
+.dash .tb-btn{border:1.5px solid var(--btn-edge)}
+.dash .side-nav a,.dash .side-nav button{font-weight:600}
