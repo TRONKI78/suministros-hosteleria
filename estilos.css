@@ -469,4 +469,23 @@ a.btn{text-decoration:none}
 .dash .tb-btn{border:1.5px solid var(--btn-edge)}
 .dash .side-nav a,.dash .side-nav button{font-weight:600}
 
-.hero 
+/* ===== Móvil: letras pequeñas más grandes y con más contraste ===== */
+@media (max-width:719px){
+  :root{--muted:#3E5654}
+  .meta,.top .who span,.flash span,.level .meta,.kv span,.rep span{font-size:14px}
+  .ref{font-size:13px;letter-spacing:.5px}
+  .price small,.lines .nm small,.ritem .nm small,.slots button small,.specs span,.cat small{font-size:13px}
+  .pill,.tag-st{font-size:13px;height:26px}
+  .tabs a{font-size:13px}
+  .track div{font-size:12px}
+  .note{font-size:13px}
+  .ocard p,.minbox,.field{font-size:14px}
+  .chip{font-size:14px}
+  .cat{font-size:14px}
+  .pbody h3{font-size:16px}
+  .lines .nm{font-size:14px}
+  .sum{font-size:15px}
+  .fact,.fact td small,.fact-head span,.fact-pie{font-size:13px}
+  .fact th{font-size:12px}
+  .toast{font-size:14px}
+}

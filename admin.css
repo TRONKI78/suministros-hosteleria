@@ -276,3 +276,14 @@ body.dash::before{background:#1B7F7A}
   .tbl tr{background:var(--d-card);box-shadow:0 1px 4px rgba(18,59,57,.06)}
   .tbl tbody tr:nth-child(even){background:var(--d-card)}
 }
+
+/* Móvil: letras pequeñas del panel más grandes */
+@media (max-width:860px){
+  .dash{--d-mut:#3E5654}
+  .k-top small,.c-head p,.tbl td small,.ti-c,.ti-n,.side-card span,.brand span{font-size:14px}
+  .tbl td[data-l]::before{font-size:13px}
+  .tag-st{font-size:13px;height:26px}
+  .seg button,.seg button span{font-size:14px}
+  .chart .ax{font-size:13px}
+  .vhead p{font-size:15px}
+}
