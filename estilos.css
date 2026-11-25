@@ -70,12 +70,7 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
 .fan i:nth-child(5){background:var(--coral-light);transform:rotate(24deg)}
 .wordmark{position:relative;margin-top:-58px}
 .logo-badge{display:block;width:132px;height:132px;max-width:100%;border-radius:50%;background:#000;border:3px solid #FFF8E7;box-shadow:0 4px 0 #123B39,0 0 0 6px rgba(255,248,231,.25),var(--sh-lg)}
-.ribbon-wrap{position:relative;z-index:0;margin-top:18px}
-.ribbon{position:relative;display:block;height:34px;line-height:30px;padding:0 clamp(12px,4vw,20px);background:#FFF8E7;border:1.5px solid #123B39;color:#1E8C86;font-weight:800;font-size:clamp(10px,3.2vw,12px);letter-spacing:clamp(1.5px,.8vw,3px);white-space:nowrap}
-.ribbon::before,.ribbon::after{content:"";position:absolute;top:4px;width:26px;height:34px;background:#F3E6C4;border:1.5px solid #123B39;z-index:-1}
-.ribbon::before{left:-18px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,30% 50%)}
-.ribbon::after{right:-18px;clip-path:polygon(0 0,100% 0,70% 50%,100% 100%,0 100%)}
-.hero p{margin:var(--s-md) 0 0;color:#fff;text-align:center;font-size:13px;opacity:.92}
+.hero p{margin:var(--s-lg) 0 0;color:#fff;text-align:center;font-size:13px;opacity:.92}
 
 /* Section titles */
 .sec{display:flex;flex-direction:column;gap:var(--s-md)}
